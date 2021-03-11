@@ -270,12 +270,13 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector)
 ///
 Vec vectorField(int x, int y)
 {
-    return { x*x+y*y, x*x-y*y };
+    return { y*x*y, x*y*x };
 }
 
-float scale = 0.001;
+float scale = 0.00001;
 int sparsity = 50;
 float zoom = 1;
+bool drawn = false;
 
 ///
 /// Mouse scroll callback. Scrolling up/down increses/decreases the zoom
@@ -283,9 +284,10 @@ float zoom = 1;
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     if (yoffset > 0)
-        zoom *= 2;
-    else if (yoffset < 0)
-        zoom /= 2;
+        zoom += 0.1;
+    else if (zoom > 0.1 && yoffset < 0)
+        zoom -= 0.1;
+    drawn = false;
 }
 
 ///
@@ -297,6 +299,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         sparsity -= 5;
     else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         sparsity += 5;
+    drawn = false;
 }
 
 ///
@@ -308,6 +311,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         sparsity=50;
     else if (key == GLFW_KEY_Z && action == GLFW_PRESS)
         zoom = 1;
+    drawn = false;
 }
 
 ///
@@ -342,6 +346,7 @@ int main(void)
     Vec vector;
     
     float* points_array;         //this is for passing the vector as a pointer to the buffer data. Eventually this will be set to &points[0]
+
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -350,42 +355,45 @@ int main(void)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
     ShaderProgramSource source = parseShader("res/shaders/basic.shader");
-
     unsigned int shader = createShader(source.vertex_source, source.fragment_source);
     glUseProgram(shader);
+
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetKeyCallback(window, key_callback);
 
-    int x,y;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         
-        //The drawwing starts:
-        for (int i = -500; i < 501; i = i + sparsity)
+        if (!drawn)
         {
-            for (int j = -500; j < 501; j = j + sparsity)
+            points.clear();
+            //The drawwing starts:
+            for (int i = -500; i < 501; i = i + sparsity)
             {
-                vector = vectorField(i*1/zoom, j*1/zoom);     //If zoom is 2, then we have to find the vector not at (i,j) but at (i/2,j/2) and then plot it at (i,j)
-                //           makeCircle(points, i, j, sqrt(vector.i*vector.i/100+vector.j*vector.j/100));
-                makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale);     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) cause that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
-                makeCircle(points, i, j, 2); //teeny tiny circle at base for aesthetic
-                makeArrowHead(points, i, j, { (int)(vector.i * zoom * scale), (int)(vector.j * zoom * scale) }); //make an arrow head
+                for (int j = -500; j < 501; j = j + sparsity)
+                {
+                    vector = vectorField(i * 1 / zoom, j * 1 / zoom);     //If zoom is 2, then we have to find the vector not at (i,j) but at (i/2,j/2) and then plot it at (i,j)
+                    //           makeCircle(points, i, j, sqrt(vector.i*vector.i/100+vector.j*vector.j/100));
+                    makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale);     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) cause that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
+                    makeCircle(points, i, j, 2); //teeny tiny circle at base for aesthetic
+                    makeArrowHead(points, i, j, { (int)(vector.i * zoom * scale), (int)(vector.j * zoom * scale) }); //make an arrow head
+                }
             }
+
+            for (int i = 0; i < points.size(); i++)     //normalizing points
+                points.at(i) = (points.at(i) / 500.0f);
+            points_array = &points[0];  //the promised step
+
+            glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points_array, GL_STATIC_DRAW);
+
+            drawn = true;
         }
 
-        for (int i = 0; i < points.size(); i++)     //normalizing points
-            points.at(i) = (points.at(i) / 500.0f);
-        points_array = &points[0];  //the promised step
-
-        glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points_array, GL_STATIC_DRAW);
-
-        glDrawArrays(GL_POINTS, 0, points.size()/2);
-
-        points.clear();
+        glDrawArrays(GL_POINTS, 0, points.size() / 2);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
