@@ -270,11 +270,11 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector)
 ///
 Vec vectorField(int x, int y)
 {
-    return { y*x*y, x*y*x };
+    return { x*x*y, y*y*x};
 }
 
-float scale = 0.00001;
-int sparsity = 50;
+float scale = 0.000001;
+float sparsity = 50;
 float zoom = 1;
 bool drawn = false;
 
@@ -284,9 +284,19 @@ bool drawn = false;
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     if (yoffset > 0)
-        zoom += 0.1;
-    else if (zoom > 0.1 && yoffset < 0)
-        zoom -= 0.1;
+    {
+        std::cout << zoom << std::endl;
+        std::cout << sparsity << std::endl;
+        zoom *= 1.1;
+        sparsity *= 1.1;
+    }
+    else if (yoffset < 0)
+    {
+        std::cout << zoom << std::endl;
+        std::cout << sparsity << std::endl;
+        zoom /= 1.1;
+        sparsity /= 1.1;
+    }
     drawn = false;
 }
 
@@ -296,9 +306,9 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     if (sparsity>5 && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-        sparsity -= 5;
+        sparsity *= 1.1;
     else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-        sparsity += 5;
+        sparsity /= 1.1;
     drawn = false;
 }
 
