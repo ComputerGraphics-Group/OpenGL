@@ -24,7 +24,7 @@
           Getting Started
       </div>
       <div class="content">
-          Possibly like many others, we started out by first learning OpenGL from a course on youtube by The Cherno ™. We set up our workspace using GLFW for making the window and GLEW
+          Possibly like many others, we started out by first learning OpenGL from a course on youtube by The Cherno™. We set up our workspace using GLFW for making the window and GLEW
           for accessing OpenGL functions. We spent around a week getting acclimated to the state machine, figuring out how shaders work and finally drew an inconspicuous triangle
           (with color) using standard OpenGL functions. No "custom" code was written yet. We then decided to start off the actual assignment.
       </div>
@@ -78,13 +78,15 @@
             </div>
           </div>
           This was a tad bit too boring, so we made the circle move based on mouse position
-          <div class="image">  <!--add the gif-->
+          <div class="image">
+            <img src="movingCircle.gif">
             <div class="label">
               Movable circle
             </div>
           </div>
           We enhanced this further by simulating the circle tool present in design apps, where you can choose the centre and radius interactively
-          <div class="image">  <!--add the gif-->
+          <div class="image">
+            <img src="movingResizingCircle.gif">
             <div class="label">
               Movable resizable circle
             </div>
@@ -101,7 +103,7 @@
           <div class="image">
             <img src="firstField.png">
             <div class="label">
-              Vector field for xi + yj
+              Vector field of xi + yj
             </div>
           </div>
           Of course, this was just the first step. The scaling was not proper, so the next thing we did is add a scaling factor and draw the line from 
@@ -109,26 +111,26 @@
           <div class="image">
             <img src="scaledField1.png">
             <div class="label">
-              Vector field for xi + yj
+              Vector field of xi + yj
             </div>
           </div>
           <div class="image">
             <img src="scaledField2.png">
             <div class="label">
-              Vector field for yi - xj
+              Vector field of yi - xj
             </div>
           </div>
           <div class="image">
             <img src="scaledField3.png">
             <div class="label">
-              Vector field for (x²+y²)i + (x²-y²)j
+              Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
           We might start to see a problem here. The scaling factor should increase as the order of the vector field increases so as to meaningfully scale every vector in sight.
           <div class="image">
             <img src="scaledScaledField.png">
             <div class="label">
-              Vector field for (x²+y²)i + (x²-y²)j
+              Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
           This still looks crude. It's missing the crucial arrows! For computing the 3 points required for an arrow of a vector, we first normalized the vector in question,
@@ -137,43 +139,134 @@
           <div class="image">
             <img src="arrowField1.png">
             <div class="label">
-              Vector field for (x²+y²)i + (x²-y²)j
+              Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
           <div class="image">
             <img src="arrowField2.png">
             <div class="label">
-              Vector field for x²i + y²j
+              Vector field of x<sup>2</sup>i + y<sup>2</sup>j
             </div>
           </div>
           <div class="image">
             <img src="arrowField3.png">
             <div class="label">
-              Vector field for (x²-y²)i + (x²-y²)j
+              Vector field of (x<sup>2</sup>-y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
           The next thing we wanted is for the field to be interactive. We wanted to be able to zoom in, change density, scaling, etc. We spent quite a bit of time refining the zooming
           feature. We also added tiny circles at the base of every vector for aesthetic
-          <div class="image">  <!--add the gif-->
+          <div class="image">
+            <img src="zoom1.gif">
             <div class="label">
-              We changed the scaling too much on each render
+              Vector field of (xy-x<sup>2</sup>)i + (xy-y<sup>2</sup>)j
             </div>
           </div>
-          <div class="image">  <!--add the gif-->
+          We were changing the scaling too much on each render
+          <p>&nbsp;</p>
+          <div class="image">
+            <img src="zoom2.gif">
             <div class="label">
-              Density was not being affected so it doesn't feel like a real zoom
+              Vector field of (xy-x<sup>2</sup>)i + (xy-y<sup>2</sup>)j
             </div>
           </div>
-          After quite a bit of trial and error, we arrived at the current zooming solution:
-          There are 2 variables, zoom and sparsity. When scrolling the mouse wheel down, zoom and sparsity are divided by 1.1. A vector placed at the current (x,y) is actually
-          calculated at (x/zoom, y/zoom). Finally, to give the feeling of going farther, the vector length is now vectorlength*zoom
-          <div class="image">  <!--add the gif-->
+          <p>Density was not being affected so it doesn't feel like a real zoom</p>
+          Eventually after quite a bit of trial and error, we arrived at the current zooming solution:
+          There are 2 variables, zoom and sparsity. When scrolling the mouse wheel down, zoom and sparsity are divided by 1.1 and when it is scrolled up, they are nultiplied by 1.1.
+          The vector that ends up at (x,y) is actually calculated at (x/zoom, y/zoom). Finally, to give the feeling of going farther or coming closer, the vector length is now
+          vectorlength*zoom
+          <div class="image">
+            <img src="zoomFinal.gif">
             <div class="label">
-              Real zoom
+              Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
       </div>
-
+  </div>
+  <div class="segment">
+    <div class="title">
+      Playing around
+    </div>
+    <div class="content">
+      One simple way to make the vector field look more appealing is to add color! Our initial, naive approach was this: Set the RG value for each pixel to be equal to its normalized
+      coordinates with the B equal to 1. This was the result:
+      <div class="image">
+        <img src="color1.gif">
+        <div class="label">
+          Vector field of x<sup>2</sup>i + xyj
+        </div>
+      </div>
+      We could have fixed the black quadrant by adjusting the values more carefully, but we deemed this coloring scheme unworthy of further experimentation as it was not dynamic at all.
+      <p>The next scheme we tried out was setting the RG values of all pixels in a vector to the x and y components of that vector (B=1.0 again). This this what it looked like:</p>
+      <div class="image">
+        <img src="firstColorField1.png">
+        <div class="label">
+          Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
+        </div>
+      </div>
+      Noticing closely, the arrows and the base circles are colored wrong. To fix this, we made the line drawing algorithm return the dx and dy and we passed them to the arrow and circle
+      drawing functions.
+      <div class="image">
+        <img src="firstColorFieldFixed.png">
+        <div class="label">
+          Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
+        </div>
+      </div>
+      In general, the more x component the vector has, the more magenta it is and the more y component it has, the more cyan it is. Remember that blue appears where both are insignificant
+      and white appears where both are significant
+      <div class="image">
+        <img src="secondColorField.png">
+        <div class="label">
+          Vector field of y<sup>2</sup>xi + x<sup>2</sup>yj
+        </div>
+      </div>
+      <div class="image">
+        <img src="colorField3.gif">
+        <div class="label">
+          Vector field of (xy-x<sup>2</sup>)i + (xy-y<sup>2</sup>)j
+        </div>
+      </div>
+      <div class="image">
+        <img src="colorField4.gif">
+        <div class="label">
+          Vector field of x<sup>2</sup>yi + y<sup>2</sup>xj
+        </div>
+      </div>
+      This one looks like the collision of stars
+      <p>&nbsp;</p>
+      <div class="image">
+        <img src="colorField5.gif">
+        <div class="label">
+          Vector field of x<sup>3</sup>yi + y<sup>3</sup>xj
+        </div>
+      </div>
+      And here we have an explosion of sorts
+      <p>&nbsp;</p>
+      <div class="image">
+        <img src="colorField6.gif">
+        <div class="label">
+          Vector field of x<sup>3</sup>yi + x<sup>2</sup>y<sup>2</sup>j
+        </div>
+      </div>
+      A similar explosion, but two cutting across each other
+      <p>&nbsp;</p>
+      <div class="image">
+        <img src="colorField7.gif">
+        <div class="label">
+          Vector field of x<sup>4</sup>yi + y<sup>4</sup>xj
+        </div>
+      </div>
+      Unsurprisingly, this field looks similar to the one of x²yi + y²xj
+      <p>&nbsp;</p>
+      <div class="image">
+        <img src="colorField8.gif">
+        <div class="label">
+          Vector field of 2x<sup>2</sup>yi + xy(x-y)j
+        </div>
+      </div>
+      For a change, we mapped dx and dy to B and G leaving R at 1.0. The more x component a vector has, the more magenta it appears and the more y component it has, the more yellow it appears. This was so visually pleasing that we wanted to zoom out even more, but unfortunately had to stop because our laptops were fighting to survive. Speaking of that, let us analyse the
+      running time of this algorithm.
+    </div>
   </div>
 </body>
 </html>
