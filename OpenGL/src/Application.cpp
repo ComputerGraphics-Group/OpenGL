@@ -107,35 +107,39 @@ static unsigned int createShader(const std::string& vertex_shader, const std::st
 ///
 void makeLine(std::vector<float> &points, int x1, int y1, int x2, int y2)
 {
-    int dx, dy, i, e;
-    int incx, incy, inc1, inc2;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int i, d;
+    int incNE, incE;
     int x, y;
-    dx = x2 - x1;
-    dy = y2 - y1;
-    if (dx < 0) dx = -dx;
-    if (dy < 0) dy = -dy;
-    incx = 1;
-    if (x2 < x1) incx = -1;
-    incy = 1;
-    if (y2 < y1) incy = -1;
+    if (dx < 0)
+        dx = -dx;
+    if (dy < 0) 
+        dy = -dy;
+    int incx = 1;
+    if (x2 < x1)
+        incx = -1;
+    int incy = 1;
+    if (y2 < y1)
+        incy = -1;
     x = x1; y = y1;
     if (dx > dy)
     {
         points.push_back(x);
         points.push_back(y);
 
-        e = 2 * dy - dx;
-        inc1 = 2 * (dy - dx);
-        inc2 = 2 * dy;
+        d = 2 * dy - dx;
+        incNE = 2 * (dy - dx);
+        incE = 2 * dy;
         for (i = 0; i < dx; i++)
         {
-            if (e >= 0)
+            if (d >= 0)
             {
                 y += incy;
-                e += inc1;
+                d += incNE;
             }
             else
-                e += inc2;
+                d += incE;
             x += incx;
             points.push_back(x);
             points.push_back(y);
@@ -145,18 +149,18 @@ void makeLine(std::vector<float> &points, int x1, int y1, int x2, int y2)
     {
         points.push_back(x);
         points.push_back(y);
-        e = 2 * dx - dy;
-        inc1 = 2 * (dx - dy);
-        inc2 = 2 * dx;
+        d = 2 * dx - dy;
+        incNE = 2 * (dx - dy);
+        incE = 2 * dx;
         for (i = 0; i < dy; i++)
         {
-            if (e >= 0)
+            if (d >= 0)
             {
                 x += incx;
-                e += inc1;
+                d += incNE;
             }
             else
-                e += inc2;
+                d += incE;
             y += incy;
             points.push_back(x);
             points.push_back(y);
@@ -270,10 +274,10 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector)
 ///
 Vec vectorField(int x, int y)
 {
-    return { x*x*y, y*y*x};
+    return { x*x+y*y, x*x-y*y};
 }
 
-float scale = 0.000001;
+float scale = 0.001;
 float sparsity = 50;
 float zoom = 1;
 bool drawn = false;
@@ -395,7 +399,7 @@ int main(void)
             }
 
             for (int i = 0; i < points.size(); i++)     //normalizing points
-                points.at(i) = (points.at(i) / 500.0f);
+                points.at(i) = (points.at(i) * 0.002);
             points_array = &points[0];  //the promised step
 
             glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points_array, GL_STATIC_DRAW);

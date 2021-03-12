@@ -1,0 +1,138 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Process and Results</title>
+  <meta name="description" content="Process and Results">
+  <meta name="author" content="PSK">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+</head>
+
+<!--To DO: Add polyline-->
+<!--To DO: Add timing analysis-->
+<!--To DO: Add gifs-->
+<!--To DO: Add circle vector field-->
+<!--To DO: Add color(?)-->
+
+<body>
+  <div class="segment">
+      <div class="title">
+          Getting Started
+      </div>
+      <div class="content">
+          Possibly like many others, we started out by first learning OpenGL from a course on youtube by The Cherno ™. We set up our workspace using GLFW for making the window and GLEW
+          for accessing OpenGL functions. We spent around a week getting acclimated to the state machine, figuring out how shaders work and finally drew an inconspicuous triangle
+          (with color) using standard OpenGL functions. No "custom" code was written yet. We then decided to start off the actual assignment.
+      </div>
+  </div>
+  <div class="segment">
+      <div class="title">
+          Bresenham's Line Drawing
+      </div>
+      <div class="content">
+          <div class="image">
+            <img src="bresenhamLine.png">
+          </div>
+          This was pretty straighforward and we thought we coded it perfectly, until we realized we didn't...
+          <div class="issue">
+              <div class="issue_title">
+                We didn't take into account lines whose first point's coordinates are higher than the second point's
+              </div>
+              <div class="issue_fix">
+                  Pretty simple fix. We added conditionals to check for it and set incx or incy appropriately
+                  <div class="image">
+                    <img src="incFix.png">
+                  </div>
+              </div>
+          </div>
+          <div class="image">
+            <img src="bresenhamLineFixed.png">
+          </div>
+          Overall, this part was pretty easy. We didn't experiment around much because well, it's just a line drawing algorithm
+      </div>
+  </div>
+  <div class="segment">
+      <div class="title">
+          Bresenham's Circle Drawing
+      </div>
+      <div class="content">
+          This, too was pretty straightforward
+          <div class="image">
+            <img src="bresenhamCircle.png">
+          </div>
+          This was a tad bit too boring, so we made the circle move based on mouse position
+          <div class="image">  <!--add the gif-->
+          </div>
+          We enhanced this further by simulating the circle tool present in design apps, where you can choose the centre and radius interactively
+          <div class="image">  <!--add the gif-->
+          </div>
+      </div>
+  </div>
+  <div class="segment">
+      <div class="title">
+          Plotting Vector Fields
+      </div>
+      <div class="content">
+          We cycled through points set at a fixed spacing and computed the vector at each of those points. They were then drawn using the aforementioned line drawing algorithm. If
+          (x,y) was the point, then the line was drawn from (x,y) to (x + vectorField(x,y).x , y + vectorField(x,y).y)
+          <div class="image">
+            <img src="firstField.png">
+            Vector field for xi + yj
+          </div>
+          Of course, this was just the first step. The scaling was not proper, so the next thing we did is add a scaling factor and draw the line from 
+          (x,y) to (x + scalar * vectorField(x,y).x , y + scalar * vectorField(x,y).y)
+          <div class="image">
+            <img src="scaledField1.png">
+            Vector field for xi + yj
+          </div>
+          <div class="image">
+            <img src="scaledField2.png">
+            Vector field for yi - xj
+          </div>
+          <div class="image">
+            <img src="scaledField3.png">
+            Vector field for (x²+y²)i + (x²-y²)j
+          </div>
+          We might start to see a problem here. The scaling factor should increase as the order of the vector field increases so as to meaningfully scale every vector in sight.
+          <div class="image">
+            <img src="scaledScaledField.png">
+            Vector field for (x²+y²)i + (x²-y²)j
+          </div>
+          This still looks crude. It's missing the crucial arrows! For computing the 3 points required for an arrow of a vector, we first normalized the vector in question,
+          found out the two perpendiculars to it, and then transformed the heads of those perpendiculars to the right place. The two transformed heads along with the original head give us
+          the 3 required points. We used the Bresenham's line algorithm to draw between these points
+          <div class="image">
+            <img src="arrowField1.png">
+            Vector field for (x²+y²)i + (x²-y²)j
+          </div>
+          <div class="image">
+            <img src="arrowField2.png">
+            Vector field for x²i + y²j
+          </div>
+          <div class="image">
+            <img src="arrowField3.png">
+            Vector field for (x²-y²)i + (x²-y²)j
+          </div>
+          The next thing we wanted is for the field to be interactive. We wanted to be able to zoom in, change density, scaling, etc. We spent quite a bit of time refining the zooming
+          feature. We also added tiny circles at the base of every vector for aesthetic
+          <div class="image">  <!--add the gif-->
+            We changed the scaling too much on each render
+          </div>
+          <div class="image">  <!--add the gif-->
+            Density was not being affected so it doesn't feel like a real zoom
+          </div>
+          After quite a bit of trial and error, we arrived at the current zooming solution:
+          There are 2 variables, zoom and sparsity. When scrolling the mouse wheel down, zoom and sparsity are divided by 1.1. A vector placed at the current (x,y) is actually
+          calculated at (x/zoom, y/zoom). Finally, to give the feeling of going farther, the vector length is now vectorlength*zoom
+          <div class="image">  <!--add the gif-->
+            Real zoom
+          </div>
+      </div>
+
+  </div>
+</body>
+</html>
