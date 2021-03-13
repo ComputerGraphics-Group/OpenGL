@@ -40,20 +40,16 @@
               Bresenham's line
             </div>
           </div>
-          This was pretty straighforward and we thought we coded it perfectly, until we realized we didn't...
-          <div class="issue">
-              <div class="issue-title">
-                We didn't take into account lines whose first point's coordinates are higher than the second point's
+          This was pretty straighforward and we thought we coded it perfectly, until we realized we didn't...          
+          We didn't take into account lines whose first point's coordinates are higher than the second point's
+          Pretty simple fix. We added conditionals to check for it and set incx or incy appropriately
+          <div class="code">
+            <div class="image">
+              <img src="incFix.png">
+              <div class="label">
+                Increment fix
               </div>
-              <div class="issue-fix">
-                  Pretty simple fix. We added conditionals to check for it and set incx or incy appropriately
-                  <div class="image">
-                    <img src="incFix.png">
-                    <div class="label">
-                      Increment fix
-                    </div>
-                  </div>
-              </div>
+            </div>
           </div>
           And then it worked:
           <div class="image">
@@ -264,9 +260,89 @@
           Vector field of 2x<sup>2</sup>yi + xy(x-y)j
         </div>
       </div>
-      For a change, we mapped dx and dy to B and G leaving R at 1.0. The more x component a vector has, the more magenta it appears and the more y component it has, the more yellow it appears. This was so visually pleasing that we wanted to zoom out even more, but unfortunately had to stop because our laptops were fighting to survive. Speaking of that, let us analyse the
-      running time of this algorithm.
+      For a change, we mapped dx and dy to B and G leaving R at 1.0. The more x component a vector has, the more magenta it appears and the more y component it has, the more yellow it
+      appears. This was so visually pleasing that we wanted to zoom out even more, but unfortunately had to stop because our laptops were fighting to survive. Speaking of that, let us
+      analyse the running time of this algorithm.
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      To take a look at the performance, we set up a timer that starts right before computing all the required points and stops when that is done. We did not measure the time it takes
+      for OpenGL to draw those points as it is not in our hands anyways. We used a test field, xy<sup>2</sup>i + x<sup>2</sup>yj. These were the results as we gradually zoomed out:
+      <div class="terminal-set">
+        <div class="terminal">
+          <div class="image">
+            <img src="timing1.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="image">
+            <img src="timing2.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="image">
+            <img src="timing3.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+      </div>
+      All the times are in milliseconds. We can make a few observations from this:
+      <ul>
+        <li>It's generally taking more and more time per render as we increases the density. An outlier is iteration 23, which took significanly lower time than the previous.
+          We ran the test for this field multiple times and this pattern showed itself on every run. In fact, even in different fields, one particular iteration always ended up showing
+          this phenomenon.
+        </li>
+        <li>
+          Average time per point is unstable in the first few iterations, but stabilizes near the end. The reason for this is almost definitely the error in measurement of very low
+          millisecond values in the beginning
+        </li>
+        <li>There are way too many points; much more than we expected. The total number of unique points is only supposed to be 1000*1000 as that is the resolution of our window.</li>
+      </ul>
+      <p>&nbsp;</p>
+      <h3>Attempting to optimize</h5>
+      We're not sure why the first observation occurs and the second observation is not worth pondering. The third one however, has room for improvement.
+      <p>We theorised that the reason there are so many points are because of 2 reasons: Duplicate points and points outside the window.</p>
+      Points outside the window:
+      This happens because even though we are looping across only points contained in the window, the lines drawn from there might not be. Considering the circumstances, a sophisticated
+      clipping algorithm like Cohen Sutherland's is unnecessary. Instead, we can just add this one line in the line drawing function inside the for loop:
+      <div class="one-line-code">
+        <div class="image">
+          <img src="clippingCode.png">
+          <div class="label">
+            Code to check for points out of window
+          </div>
+        </div>
+      </div>
+      Since we know that the base is always inside the window, we just have to check if any point drawn from the base falls outside. If it does, then we exist the function as the line is
+      clipped from there on. (We still have to return dx and dy for the coloring of the base circle).
     </div>
+    Another interesting variation on the vector field is applying the function not on a vector but rather the color of the point. The result is functionally the same except that the resultant viewport displays some 
+      fascinating color schemes at low sparsity.
+      <div class="image">
+        <img src="colorfield1.jpg">
+        <div class="label">
+          Color field of f(x,y) = (0.5,abs(x),abs(y)) in rgb
+        </div>
+      </div>
+      <div class="image">
+        <img src="colorfields2.jpg">
+        <div class="label">
+          Color field of f(x,y) = (0.5,sin x,cos y) in rgb
+        </div>
+      </div>
+      <div class="image">
+        <img src="colorfields3.jpg">
+        <div class="label">
+          Color field of f(x,y) = (y/sqrt(x<sup>2</sup>+y<sup>2</sup>),x/sqrt(x<sup>2</sup>+y<sup>2</sup>),x+y/xy) in rgb
+        </div>
+      </div>
   </div>
 </body>
 </html>

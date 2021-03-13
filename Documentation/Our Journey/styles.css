@@ -49,9 +49,35 @@ img {
   object-fit: cover;
 }
 
-.issue-fix .image {
+.code .image {
   width: 200px;
   height: 200px;
+}
+
+.terminal-set {
+  display: flex;
+}
+
+.terminal {
+  flex: 1;
+}
+
+.terminal .image {
+  width: 350px;
+  height: 400px;
+}
+
+.terminal img {
+  object-fit: fill;
+}
+
+.one-line-code .image {
+  width: 800px;
+  height: 130px;
+}
+
+.one-line-code img {
+  height: 80%;
 }
 
 .image {
