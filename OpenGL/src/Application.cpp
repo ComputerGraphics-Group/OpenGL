@@ -529,7 +529,7 @@ int main(void)
                 for (int j = -500; j < 501; j = j + sparsity)
                 {
                     vector = vectorField(i * 1 / zoom, j * 1 / zoom);     //If zoom is 2, then we have to find the vector not at (i,j) but at (i/2,j/2) and then plot it at (i,j)
-                    //           makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale));
+                    //           makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale), {0,0});
                     c = makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale, true, { 0,0 });     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) cause that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
                     makeCircle(points, i, j, 2, c); //teeny tiny circle at base for aesthetic
                     makeArrowHead(points, i, j, { (vector.i * zoom * scale), (vector.j * zoom * scale) }, c); //make an arrow head
