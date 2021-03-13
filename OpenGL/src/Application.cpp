@@ -134,105 +134,115 @@ static unsigned int createShader(const std::string& vertex_shader, const std::st
 /// @param c The color of the given line. 
 Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool is_vector, Color c)
 {
-	int dx = x2 - x1;
-	int dy = y2 - y1;
-	int i, d;
-	int incNE, incE;
-	int x, y;
-	if (dx < 0)
-		dx = -dx;
-	if (dy < 0)
-		dy = -dy;
-	int incx = 1;
-	if (x2 < x1)
-		incx = -1;
-	int incy = 1;
-	if (y2 < y1)
-		incy = -1;
-	x = x1; y = y1;
-	if (dx > dy)
-	{
-		points.push_back(x);
-		points.push_back(y);
-		if (is_vector)
-		{
-			points.push_back(dx);
-			points.push_back(dy);
-		}
-		else
-		{
-			points.push_back(c.x);
-			points.push_back(c.y);
-		}
-		d = 2 * dy - dx;
-		incNE = 2 * (dy - dx);
-		incE = 2 * dy;
-		for (i = 0; i < dx; i++)
-		{
-			if (d >= 0)
-			{
-				y += incy;
-				d += incNE;
-			}
-			else
-				d += incE;
-			x += incx;
-			points.push_back(x);
-			points.push_back(y);
-			if (is_vector)
-			{
-				points.push_back(dx);
-				points.push_back(dy);
-			}
-			else
-			{
-				points.push_back(c.x);
-				points.push_back(c.y);
-			}
-		}
-	}
-	else
-	{
-		points.push_back(x);
-		points.push_back(y);
-		if (is_vector)
-		{
-			points.push_back(dx);
-			points.push_back(dy);
-		}
-		else
-		{
-			points.push_back(c.x);
-			points.push_back(c.y);
-		}
-		d = 2 * dx - dy;
-		incNE = 2 * (dx - dy);
-		incE = 2 * dx;
-		for (i = 0; i < dy; i++)
-		{
-			if (d >= 0)
-			{
-				x += incx;
-				d += incNE;
-			}
-			else
-				d += incE;
-			y += incy;
-			points.push_back(x);
-			points.push_back(y);
-			if (is_vector)
-			{
-				points.push_back(dx);
-				points.push_back(dy);
-			}
-			else
-			{
-				points.push_back(c.x);
-				points.push_back(c.y);
-			}
-		}
-	}
-	return { dx, dy };
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int i, d;
+    int incNE, incE;
+    int x, y;
+    if (dx < 0)
+        dx = -dx;
+    if (dy < 0)
+        dy = -dy;
+    int incx = 1;
+    if (x2 < x1)
+        incx = -1;
+    int incy = 1;
+    if (y2 < y1)
+        incy = -1;
+    x = x1; y = y1;
+    if (dx > dy)
+    {
+        points.push_back(x);
+        points.push_back(y);
+        if (is_vector)
+        {
+            points.push_back(dx);
+            points.push_back(dy);
+        }
+        else
+        {
+            points.push_back(c.x);
+            points.push_back(c.y);
+        }
+        d = 2 * dy - dx;
+        incNE = 2 * (dy - dx);
+        incE = 2 * dy;
+        for (i = 0; i < dx; i++)
+        {
+            if (x > 500 || x < -500 || y > 500 || y < -500)
+            {
+                return { dx,dy };
+            }
+
+            if (d >= 0)
+            {
+                y += incy;
+                d += incNE;
+            }
+            else
+                d += incE;
+            x += incx;
+            points.push_back(x);
+            points.push_back(y);
+            if (is_vector)
+            {
+                points.push_back(dx);
+                points.push_back(dy);
+            }
+            else
+            {
+                points.push_back(c.x);
+                points.push_back(c.y);
+            }
+        }
+    }
+    else
+    {
+        points.push_back(x);
+        points.push_back(y);
+        if (is_vector)
+        {
+            points.push_back(dx);
+            points.push_back(dy);
+        }
+        else
+        {
+            points.push_back(c.x);
+            points.push_back(c.y);
+        }
+        d = 2 * dx - dy;
+        incNE = 2 * (dx - dy);
+        incE = 2 * dx;
+        for (i = 0; i < dy; i++)
+        {
+            if (x > 500 || x < -500 || y > 500 || y < -500)
+            {
+                return { dx,dy };
+            }
+
+            if (d >= 0)
+            {
+                x += incx;
+                d += incNE;
+            }
+            else
+                d += incE;
+            y += incy;
+            points.push_back(x);
+            points.push_back(y);
+            if (is_vector)
+            {
+                points.push_back(dx);
+                points.push_back(dy);
+            }
+            else
+            {
+                points.push_back(c.x);
+                points.push_back(c.y);
+            }
+        }
+    }
+    return { dx, dy };
 }
 
 /// Draws a circle at the given point and given radius.
@@ -385,7 +395,7 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector, Color
 /// @param x,y the input of the function f(x,y).
 Vec vectorField(float x, float y)
 {
-    return { x*x*y+y*x*x, x*x*y-y*y*x };
+    return { x * y * y, y * x * x };
 }
 
 /// The scale size of the drawn elements. Made for the purposes of efficiency.
@@ -500,8 +510,8 @@ int main(void)
     glfwSetKeyCallback(window, key_callback);
 
     double tpp;
-    double sum_tpp=0;
-    int n=0;
+    double sum_tpp = 0;
+    int n = 0;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -512,6 +522,7 @@ int main(void)
         {
             n++;
             points.clear();
+            std::cout << "Sparsity: " << sparsity << ", Iteration: " << n << std::endl;
             //The drawwing starts:
             std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
             Color c;
@@ -543,7 +554,7 @@ int main(void)
             tpp = (double)duration.count() / (double)points.size();
             sum_tpp += tpp;
             std::cout << "Time per point: " << tpp << std::endl;
-            std::cout << "Average time per point so far: " << sum_tpp/(double)n << std::endl << std::endl;
+            std::cout << "Average time per point so far: " << sum_tpp / (double)n << std::endl << std::endl;
         }
 
         glDrawArrays(GL_POINTS, 0, points.size() / 4);
