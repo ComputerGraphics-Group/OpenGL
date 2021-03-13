@@ -1,5 +1,5 @@
-\hypertarget{_application_8cpp}{}\doxysection{C\+:/\+Cpp/\+Open\+GL/\+Open\+GL/\+Open\+GL/src/\+Application.cpp File Reference}
-\label{_application_8cpp}\index{C:/Cpp/OpenGL/OpenGL/OpenGL/src/Application.cpp@{C:/Cpp/OpenGL/OpenGL/OpenGL/src/Application.cpp}}
+\hypertarget{_application_8cpp}{}\doxysection{src/\+Application.cpp File Reference}
+\label{_application_8cpp}\index{src/Application.cpp@{src/Application.cpp}}
 {\ttfamily \#include $<$GL/glew.\+h$>$}\newline
 {\ttfamily \#include $<$GLFW/glfw3.\+h$>$}\newline
 {\ttfamily \#include $<$iostream$>$}\newline
@@ -7,12 +7,15 @@
 {\ttfamily \#include $<$fstream$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
 {\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
 \doxysubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{struct_shader_program_source}{Shader\+Program\+Source}}
 \item 
 struct \mbox{\hyperlink{struct_vec}{Vec}}
+\item 
+struct \mbox{\hyperlink{struct_color}{Color}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -23,35 +26,35 @@ static unsigned int \mbox{\hyperlink{_application_8cpp_af569403d6374dc948c4f444c
 \item 
 static unsigned int \mbox{\hyperlink{_application_8cpp_a9cf1a9a01fca5d7153d78ec50c6d23b7}{create\+Shader}} (const std\+::string \&vertex\+\_\+shader, const std\+::string \&fragment\+\_\+shader)
 \item 
-void \mbox{\hyperlink{_application_8cpp_a16ab357591112d7b3a78838016ad33be}{make\+Line}} (std\+::vector$<$ float $>$ \&points, int x1, int y1, int x2, int y2)
+\mbox{\hyperlink{struct_color}{Color}} \mbox{\hyperlink{_application_8cpp_aa7ec2e05bfa22c34b8edafdeb91e27c0}{make\+Line}} (std\+::vector$<$ float $>$ \&points, int x1, int y1, int x2, int y2, bool is\+\_\+vector, \mbox{\hyperlink{struct_color}{Color}} c)
 \item 
-void \mbox{\hyperlink{_application_8cpp_ada1dce3e0e8fe92590acc36a8ba4e3bd}{make\+Circle}} (std\+::vector$<$ float $>$ \&points, int xc, int yc, int r)
+void \mbox{\hyperlink{_application_8cpp_aa43a5d6385908ce04e3ef7cb74daf4c1}{make\+Circle}} (std\+::vector$<$ float $>$ \&points, int xc, int yc, int r, \mbox{\hyperlink{struct_color}{Color}} c)
 \item 
 float \mbox{\hyperlink{_application_8cpp_a5e5346796220b271615a52428f6ec6ca}{inv\+Sqrt}} (float x)
 \item 
-void \mbox{\hyperlink{_application_8cpp_a04c1fe4131ce469f11ab897577981e57}{make\+Arrow\+Head}} (std\+::vector$<$ float $>$ \&points, int x1, int y1, \mbox{\hyperlink{struct_vec}{Vec}} vector)
+void \mbox{\hyperlink{_application_8cpp_a9fc5e0828029e5004c5150d36395c8aa}{make\+Arrow\+Head}} (std\+::vector$<$ float $>$ \&points, int x1, int y1, \mbox{\hyperlink{struct_vec}{Vec}} vector, \mbox{\hyperlink{struct_color}{Color}} c)
 \item 
-\mbox{\hyperlink{struct_vec}{Vec}} \mbox{\hyperlink{_application_8cpp_a7e13d059b3fc03bf9222ec82dfec2b84}{vector\+Field}} (int x, int y)
+\mbox{\hyperlink{struct_vec}{Vec}} \mbox{\hyperlink{_application_8cpp_a4193238358072802465250bdc0dd778d}{vector\+Field}} (float x, float y)
 \item 
-void \mbox{\hyperlink{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}{scroll\+\_\+callback}} (\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$window, double xoffset, double yoffset)
+void \mbox{\hyperlink{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}{scroll\+\_\+callback}} (GLFWwindow $\ast$window, double xoffset, double yoffset)
 \item 
-void \mbox{\hyperlink{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}{mouse\+\_\+button\+\_\+callback}} (\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$window, int button, int action, int mods)
+void \mbox{\hyperlink{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}{mouse\+\_\+button\+\_\+callback}} (GLFWwindow $\ast$window, int button, int action, int mods)
 \item 
-void \mbox{\hyperlink{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}{key\+\_\+callback}} (\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$window, int key, int scancode, int action, int mods)
+void \mbox{\hyperlink{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}{key\+\_\+callback}} (GLFWwindow $\ast$window, int key, int scancode, int action, int mods)
 \item 
 int \mbox{\hyperlink{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}{main}} (void)
 \end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-float \mbox{\hyperlink{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}{scale}} = 0.\+00001
-\item 
-int \mbox{\hyperlink{_application_8cpp_a7847ce045caadc0e6f3e77206b405312}{sparsity}} = 50
-\item 
+float \mbox{\hyperlink{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}{scale}} = 0.\+000001
+\begin{DoxyCompactList}\small\item\em The scale size of the drawn elements. Made for the purposes of efficiency. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}{sparsity}} = 50
+\begin{DoxyCompactList}\small\item\em The sparsity of points drawn onto the viewport. The smaller the number, the denser the points. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{_application_8cpp_a15776f201dc8b554110222e67a51cbae}{zoom}} = 1
-\item 
+\begin{DoxyCompactList}\small\item\em The multiplicative value of zoom provided to the viewport. Used to see more of the given element or to concentrate onto a point. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{_application_8cpp_a8d91e25a674104ae23d71b57da4718d2}{drawn}} = false
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Used to check whether the screen is currently to be drawn onto. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
@@ -61,73 +64,195 @@ bool \mbox{\hyperlink{_application_8cpp_a8d91e25a674104ae23d71b57da4718d2}{drawn
 \doxysubsubsection{\texorpdfstring{compileShader()}{compileShader()}}
 {\footnotesize\ttfamily static unsigned int compile\+Shader (\begin{DoxyParamCaption}\item[{unsigned int}]{type,  }\item[{const std\+::string \&}]{source }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
-Compiles a shader component and returns its id \mbox{\Hypertarget{_application_8cpp_a9cf1a9a01fca5d7153d78ec50c6d23b7}\label{_application_8cpp_a9cf1a9a01fca5d7153d78ec50c6d23b7}} 
+Compiles a shader component and returns its id.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The type of shader provided. \\
+\hline
+{\em source} & The contents of the given shader. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a9cf1a9a01fca5d7153d78ec50c6d23b7}\label{_application_8cpp_a9cf1a9a01fca5d7153d78ec50c6d23b7}} 
 \index{Application.cpp@{Application.cpp}!createShader@{createShader}}
 \index{createShader@{createShader}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{createShader()}{createShader()}}
 {\footnotesize\ttfamily static unsigned int create\+Shader (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{vertex\+\_\+shader,  }\item[{const std\+::string \&}]{fragment\+\_\+shader }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
-Creates a complete shader and returns its id \mbox{\Hypertarget{_application_8cpp_a5e5346796220b271615a52428f6ec6ca}\label{_application_8cpp_a5e5346796220b271615a52428f6ec6ca}} 
+Creates a shader for a shader program.
+
+This function creates and compiles vertex shaders and fragment shaders together into a shader program from a given filepath. The two seperate shaders are then deleted. \begin{DoxyReturn}{Returns}
+The resultant the program ID of the created shader program. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em vertex\+\_\+shader} & The source of the vertex shader. \\
+\hline
+{\em fragment\+\_\+shader} & The source of the fragment shader. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a5e5346796220b271615a52428f6ec6ca}\label{_application_8cpp_a5e5346796220b271615a52428f6ec6ca}} 
 \index{Application.cpp@{Application.cpp}!invSqrt@{invSqrt}}
 \index{invSqrt@{invSqrt}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{invSqrt()}{invSqrt()}}
 {\footnotesize\ttfamily float inv\+Sqrt (\begin{DoxyParamCaption}\item[{float}]{x }\end{DoxyParamCaption})}
 
-Computes the inverse square root of a float \mbox{\Hypertarget{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}\label{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}} 
+Computes the inverse square root of a float.
+
+This function uses Newton\textquotesingle{}s method for calculating an inverse square root of a floating point value. \begin{DoxyReturn}{Returns}
+The inverse square root of the given value. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The value for which the inverse square root is calculated. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}\label{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}} 
 \index{Application.cpp@{Application.cpp}!key\_callback@{key\_callback}}
 \index{key\_callback@{key\_callback}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{key\_callback()}{key\_callback()}}
-{\footnotesize\ttfamily void key\+\_\+callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$}]{window,  }\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void key\+\_\+callback (\begin{DoxyParamCaption}\item[{GLFWwindow $\ast$}]{window,  }\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})}
 
-Keyboard key callback. Pressing S will reset the sparsity and pressing Z will reset the zoom \mbox{\Hypertarget{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}\label{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}} 
+Generates Keyboard key callback.
+
+Handles the keyboard activity. Pressing S will reset the sparsity and pressing Z will reset the zoom. 
+\begin{DoxyParams}{Parameters}
+{\em window} & The window at which the key event is active. \\
+\hline
+{\em key,scancode,action,mods} & The current action the keyboard is recording. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}\label{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}} 
 \index{Application.cpp@{Application.cpp}!main@{main}}
 \index{main@{main}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{main()}{main()}}
 {\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-Main function. Subienay you do this ask me if you have any problems \mbox{\Hypertarget{_application_8cpp_a04c1fe4131ce469f11ab897577981e57}\label{_application_8cpp_a04c1fe4131ce469f11ab897577981e57}} 
+The driving function of the program.
+
+This function initialises Open\+GL windows, sets up the Array Buffer and assigns the provided data into it, sets up the shaders and draws the given vertices. It also records the runtime of each passthrough render. \mbox{\Hypertarget{_application_8cpp_a9fc5e0828029e5004c5150d36395c8aa}\label{_application_8cpp_a9fc5e0828029e5004c5150d36395c8aa}} 
 \index{Application.cpp@{Application.cpp}!makeArrowHead@{makeArrowHead}}
 \index{makeArrowHead@{makeArrowHead}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{makeArrowHead()}{makeArrowHead()}}
-{\footnotesize\ttfamily void make\+Arrow\+Head (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{x1,  }\item[{int}]{y1,  }\item[{\mbox{\hyperlink{struct_vec}{Vec}}}]{vector }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void make\+Arrow\+Head (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{x1,  }\item[{int}]{y1,  }\item[{\mbox{\hyperlink{struct_vec}{Vec}}}]{vector,  }\item[{\mbox{\hyperlink{struct_color}{Color}}}]{c }\end{DoxyParamCaption})}
 
-Makes an arrow head by calculating the 3 points and calling \mbox{\hyperlink{_application_8cpp_a16ab357591112d7b3a78838016ad33be}{make\+Line()}} on each pair \mbox{\Hypertarget{_application_8cpp_ada1dce3e0e8fe92590acc36a8ba4e3bd}\label{_application_8cpp_ada1dce3e0e8fe92590acc36a8ba4e3bd}} 
+Makes an arrow head on a particular vector.
+
+The function generates 3 points based on the given vector information and generates an arrowhead at the given point. 
+\begin{DoxyParams}{Parameters}
+{\em points} & The point vector to which the points generated are pushed onto. \\
+\hline
+{\em x1,y1} & The point at which the arrow is generated. \\
+\hline
+{\em vector} & The vector angle of the arrowhead. \\
+\hline
+{\em c} & The color of the arrowhead. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_aa43a5d6385908ce04e3ef7cb74daf4c1}\label{_application_8cpp_aa43a5d6385908ce04e3ef7cb74daf4c1}} 
 \index{Application.cpp@{Application.cpp}!makeCircle@{makeCircle}}
 \index{makeCircle@{makeCircle}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{makeCircle()}{makeCircle()}}
-{\footnotesize\ttfamily void make\+Circle (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{xc,  }\item[{int}]{yc,  }\item[{int}]{r }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void make\+Circle (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{xc,  }\item[{int}]{yc,  }\item[{int}]{r,  }\item[{\mbox{\hyperlink{struct_color}{Color}}}]{c }\end{DoxyParamCaption})}
 
-Bresenham\textquotesingle{}s circle drawing algorithm \mbox{\Hypertarget{_application_8cpp_a16ab357591112d7b3a78838016ad33be}\label{_application_8cpp_a16ab357591112d7b3a78838016ad33be}} 
+Draws a circle at the given point and given radius.
+
+This function uses Bressenham\textquotesingle{}s circle drawing algorithm to draw an eighth-\/circle at the given point and for the given radius and then mirrors it across the 8 axes. 
+\begin{DoxyParams}{Parameters}
+{\em points} & The point vector to which the points generated are pushed onto. \\
+\hline
+{\em xc,yc} & The point at which the circle\textquotesingle{}s center lies. \\
+\hline
+{\em r} & The radius of the point. \\
+\hline
+{\em c} & The color of the circle. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_aa7ec2e05bfa22c34b8edafdeb91e27c0}\label{_application_8cpp_aa7ec2e05bfa22c34b8edafdeb91e27c0}} 
 \index{Application.cpp@{Application.cpp}!makeLine@{makeLine}}
 \index{makeLine@{makeLine}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{makeLine()}{makeLine()}}
-{\footnotesize\ttfamily void make\+Line (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{x1,  }\item[{int}]{y1,  }\item[{int}]{x2,  }\item[{int}]{y2 }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_color}{Color}} make\+Line (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{x1,  }\item[{int}]{y1,  }\item[{int}]{x2,  }\item[{int}]{y2,  }\item[{bool}]{is\+\_\+vector,  }\item[{\mbox{\hyperlink{struct_color}{Color}}}]{c }\end{DoxyParamCaption})}
 
-Bresenham\textquotesingle{}s line drawing algorithm \mbox{\Hypertarget{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}\label{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}} 
+Draws a line using individual points.
+
+This function draws a line between the given two points. It uses Bressenham\textquotesingle{}s Line Alogrithm to draw each pixel onto the screen. \begin{DoxyReturn}{Returns}
+a pair of \mbox{\hyperlink{struct_color}{Color}} values for later use in point shading. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em points} & The point vector to which the points generated are pushed onto. \\
+\hline
+{\em x1,y1} & The first point. \\
+\hline
+{\em x2,y2} & The second point. \\
+\hline
+{\em is\+\_\+vector} & Is the given line to be drawn as a vector or a normal line? \\
+\hline
+{\em c} & The color of the given line. ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}\label{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}} 
 \index{Application.cpp@{Application.cpp}!mouse\_button\_callback@{mouse\_button\_callback}}
 \index{mouse\_button\_callback@{mouse\_button\_callback}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{mouse\_button\_callback()}{mouse\_button\_callback()}}
-{\footnotesize\ttfamily void mouse\+\_\+button\+\_\+callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$}]{window,  }\item[{int}]{button,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void mouse\+\_\+button\+\_\+callback (\begin{DoxyParamCaption}\item[{GLFWwindow $\ast$}]{window,  }\item[{int}]{button,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})}
 
-Mouse button callback. Clicking right/left increses/decreases the sparsity \mbox{\Hypertarget{_application_8cpp_a3f523b5fa23378b7728e157d141ee7ca}\label{_application_8cpp_a3f523b5fa23378b7728e157d141ee7ca}} 
+Generates Mouse button callback.
+
+Handles the button presses on a mouse. Clicking right/left increses/decreases the sparsity. 
+\begin{DoxyParams}{Parameters}
+{\em window} & The window at which the click event is active. \\
+\hline
+{\em button,action,mods} & The current action the mouse is recording. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a3f523b5fa23378b7728e157d141ee7ca}\label{_application_8cpp_a3f523b5fa23378b7728e157d141ee7ca}} 
 \index{Application.cpp@{Application.cpp}!parseShader@{parseShader}}
 \index{parseShader@{parseShader}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{parseShader()}{parseShader()}}
 {\footnotesize\ttfamily static \mbox{\hyperlink{struct_shader_program_source}{Shader\+Program\+Source}} parse\+Shader (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filepath }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
-Function to read the shaders in the file and return \mbox{\hyperlink{struct_shader_program_source}{Shader\+Program\+Source}} \mbox{\Hypertarget{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}\label{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}} 
+Parses the shaders from the file path for use in the shader program.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filepath} & The path of the shader file we want to parse. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}\label{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}} 
 \index{Application.cpp@{Application.cpp}!scroll\_callback@{scroll\_callback}}
 \index{scroll\_callback@{scroll\_callback}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{scroll\_callback()}{scroll\_callback()}}
-{\footnotesize\ttfamily void scroll\+\_\+callback (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group__window_ga3c96d80d363e67d13a41b5d1821f3242}{GLFWwindow}} $\ast$}]{window,  }\item[{double}]{xoffset,  }\item[{double}]{yoffset }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void scroll\+\_\+callback (\begin{DoxyParamCaption}\item[{GLFWwindow $\ast$}]{window,  }\item[{double}]{xoffset,  }\item[{double}]{yoffset }\end{DoxyParamCaption})}
 
-Mouse scroll callback. Scrolling up/down increses/decreases the zoom \mbox{\Hypertarget{_application_8cpp_a7e13d059b3fc03bf9222ec82dfec2b84}\label{_application_8cpp_a7e13d059b3fc03bf9222ec82dfec2b84}} 
+Generates a Mouse scroll callback.
+
+Handles the scrolling of the mouse. Scrolling up/down increses/decreases the zoom on the canvas. 
+\begin{DoxyParams}{Parameters}
+{\em window} & The window at which the scroll event is active. \\
+\hline
+{\em xoffset,yoffset} & The position offset of the mouse. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_a4193238358072802465250bdc0dd778d}\label{_application_8cpp_a4193238358072802465250bdc0dd778d}} 
 \index{Application.cpp@{Application.cpp}!vectorField@{vectorField}}
 \index{vectorField@{vectorField}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{vectorField()}{vectorField()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{struct_vec}{Vec}} vector\+Field (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_vec}{Vec}} vector\+Field (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
 
-The vector field function 
+Generates a vector field function.
+
+This function takes a vector input and applies a vector field function to it. \begin{DoxyReturn}{Returns}
+The resultant vector f(x,y). 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em x,y} & the input of the function f(x,y). \\
+\hline
+\end{DoxyParams}
+
 
 \doxysubsection{Variable Documentation}
 \mbox{\Hypertarget{_application_8cpp_a8d91e25a674104ae23d71b57da4718d2}\label{_application_8cpp_a8d91e25a674104ae23d71b57da4718d2}} 
@@ -136,21 +261,37 @@ The vector field function
 \doxysubsubsection{\texorpdfstring{drawn}{drawn}}
 {\footnotesize\ttfamily bool drawn = false}
 
+
+
+Used to check whether the screen is currently to be drawn onto. 
+
 \mbox{\Hypertarget{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}\label{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}} 
 \index{Application.cpp@{Application.cpp}!scale@{scale}}
 \index{scale@{scale}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{scale}{scale}}
-{\footnotesize\ttfamily float scale = 0.\+00001}
+{\footnotesize\ttfamily float scale = 0.\+000001}
 
-\mbox{\Hypertarget{_application_8cpp_a7847ce045caadc0e6f3e77206b405312}\label{_application_8cpp_a7847ce045caadc0e6f3e77206b405312}} 
+
+
+The scale size of the drawn elements. Made for the purposes of efficiency. 
+
+\mbox{\Hypertarget{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}\label{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}} 
 \index{Application.cpp@{Application.cpp}!sparsity@{sparsity}}
 \index{sparsity@{sparsity}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{sparsity}{sparsity}}
-{\footnotesize\ttfamily int sparsity = 50}
+{\footnotesize\ttfamily float sparsity = 50}
+
+
+
+The sparsity of points drawn onto the viewport. The smaller the number, the denser the points. 
 
 \mbox{\Hypertarget{_application_8cpp_a15776f201dc8b554110222e67a51cbae}\label{_application_8cpp_a15776f201dc8b554110222e67a51cbae}} 
 \index{Application.cpp@{Application.cpp}!zoom@{zoom}}
 \index{zoom@{zoom}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{zoom}{zoom}}
 {\footnotesize\ttfamily float zoom = 1}
+
+
+
+The multiplicative value of zoom provided to the viewport. Used to see more of the given element or to concentrate onto a point. 
 
