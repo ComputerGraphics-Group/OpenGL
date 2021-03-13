@@ -177,6 +177,30 @@
               Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
+          <p>PolyLines</p>
+          We can use the general idea of vector field and apply it in a different method to generate interesting results. Namely, we only generate lines at the endpoints of other lines. We start at a random point (x,y),
+          generate the endpoint of this line f(x,y) and draw a line there. Then we take f(x,y) as the new start point and generate f(f(x,y)) as its endpoint, and so on.
+          Most functions we used in the vector field example, such as x<sup>2</sup>yi + xy<sup>2</sup>j, grow too fast to be reliably seen in display. However there are certain classes of functions which can be seen.
+          For example, the function f(x,y) = (y-x,-x-y) generates a square.
+          <div class="image">
+            <img src="polyline1.jpg">
+            <div class="label">
+              Note that any starting point generates a square not matter where it is, except for (0,0) trivially
+            </div>
+          </div>  
+          With further experimentation, we observed that we can generate spiral shaped patterns by using a formula of the form f(x,y) = (ax+by,-x-y), or more generally (ax+by,-cx-dy). Given are two examples.
+          <div class="image">
+            <img src="polyline2.jpg">
+            <div class="label">
+              Polyline of f(x,y) = (3.5x+7.5y),(-x-y)
+            </div>
+          </div>
+          <div class="image">
+            <img src="polyline3.jpg">
+            <div class="label">
+              Polyline of f(x,y) = (3.5x+7.5y),(-7.2x-7.8y)
+            </div>
+          </div>
       </div>
   </div>
   <div class="segment">
