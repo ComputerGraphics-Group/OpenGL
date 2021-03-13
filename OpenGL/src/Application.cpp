@@ -169,6 +169,11 @@ Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool 
         incE = 2 * dy;
         for (i = 0; i < dx; i++)
         {
+            if (x > 500 || x < -500 || y > 500 || y < -500)
+            {
+                return { dx,dy };
+            }
+
             if (d >= 0)
             {
                 y += incy;
@@ -210,6 +215,11 @@ Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool 
         incE = 2 * dx;
         for (i = 0; i < dy; i++)
         {
+            if (x > 500 || x < -500 || y > 500 || y < -500)
+            {
+                return { dx,dy };
+            }
+
             if (d >= 0)
             {
                 x += incx;
@@ -385,7 +395,7 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector, Color
 /// @param x,y the input of the function f(x,y).
 Vec vectorField(float x, float y)
 {
-    return { x * x * y + y * x * x, x * x * y - y * y * x };
+    return { x * y * y, y * x * x };
 }
 
 /// The scale size of the drawn elements. Made for the purposes of efficiency.
@@ -510,6 +520,7 @@ int main(void)
         {
             n++;
             points.clear();
+            std::cout << "Sparsity: " << sparsity << ", Iteration: " << n << std::endl;
             //The drawwing starts:
             std::chrono::time_point<std::chrono::system_clock> start_time = std::chrono::system_clock::now();
             Color c;

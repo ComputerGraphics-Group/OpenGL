@@ -266,7 +266,14 @@
       <p>&nbsp;</p>
       <p>&nbsp;</p>
       To take a look at the performance, we set up a timer that starts right before computing all the required points and stops when that is done. We did not measure the time it takes
-      for OpenGL to draw those points as it is not in our hands anyways. We used a test field, xy<sup>2</sup>i + x<sup>2</sup>yj. These were the results as we gradually zoomed out:
+      for OpenGL to draw those points as it is not in our hands anyways. We used a test field, xy<sup>2</sup>i + x<sup>2</sup>yj. This is what it looks like:
+      <div class="image">
+        <img src="testField.gif">
+        <div class="label">
+          Vector field of xy<sup>2</sup>i + x<sup>2</sup>yj
+        </div>
+      </div>
+      These were the results as we gradually zoomed out:
       <div class="terminal-set">
         <div class="terminal">
           <div class="image">
@@ -295,7 +302,8 @@
       </div>
       All the times are in milliseconds. We can make a few observations from this:
       <ul>
-        <li>It's generally taking more and more time per render as we increases the density. An outlier is iteration 23, which took significanly lower time than the previous.
+        <li>
+          It's generally taking more and more time per render as we increases the density. An outlier is iteration 23, which took significanly lower time than the previous.
           We ran the test for this field multiple times and this pattern showed itself on every run. In fact, even in different fields, one particular iteration always ended up showing
           this phenomenon.
         </li>
@@ -303,13 +311,16 @@
           Average time per point is unstable in the first few iterations, but stabilizes near the end. The reason for this is almost definitely the error in measurement of very low
           millisecond values in the beginning
         </li>
-        <li>There are way too many points; much more than we expected. The total number of unique points is only supposed to be 1000*1000 as that is the resolution of our window.</li>
+        <li>
+          There are way too many points; much more than we expected. The total number of unique points is only supposed to be 1000*1000 as that is the resolution of our window. This
+          results in more time as well as memory usage. The 28th iteration took 9.6 seconds and peaked at 10.8 GB of RAM usage.
+        </li>
       </ul>
       <p>&nbsp;</p>
-      <h3>Attempting to optimize</h5>
+      <h2>Attempting to optimize</h2>
       We're not sure why the first observation occurs and the second observation is not worth pondering. The third one however, has room for improvement.
       <p>We theorised that the reason there are so many points are because of 2 reasons: Duplicate points and points outside the window.</p>
-      Points outside the window:
+      <h3>Points outside the window:</h3>
       This happens because even though we are looping across only points contained in the window, the lines drawn from there might not be. Considering the circumstances, a sophisticated
       clipping algorithm like Cohen Sutherland's is unnecessary. Instead, we can just add this one line in the line drawing function inside the for loop:
       <div class="one-line-code">
@@ -320,10 +331,40 @@
           </div>
         </div>
       </div>
-      Since we know that the base is always inside the window, we just have to check if any point drawn from the base falls outside. If it does, then we exist the function as the line is
-      clipped from there on. (We still have to return dx and dy for the coloring of the base circle).
-      Another interesting variation on the vector field is applying the function not on a vector but rather the color of the point. The result is functionally the same except that the resultant viewport displays some 
-      fascinating color schemes at low sparsity.
+      Since we know that the base is always inside the window, we just have to check if any point drawn from the base falls outside. If it does, then we exit the function immediately as
+      the line is clipped from there on. (We still have to return dx and dy for the coloring of the base circle). Let's see if the number of points decreases
+      <div class="terminal-set">
+        <div class="terminal">
+          <div class="image">
+            <img src="2timing1.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="image">
+            <img src="2timing2.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="image">
+            <img src="2timing3.png">
+            <div class="label">
+              Terminal
+            </div>
+          </div>
+        </div>
+      </div>
+      This is a significant reduction in time and memory consumed per render because of the reduced number of points. The higher the iteration, the more the improvement; the 28th
+      iteration being literally 17 times faster and using less than 1 GB of RAM. Another interesting observation is that the "iteration 23" phenomenon is being replicated in others
+      too, notably in 25 and 27. 
+      <br>
+      Another interesting variation on the vector field is applying the function not on a vector but rather the color of the point. The result is functionally the same except that the
+      resultant viewport displays some fascinating color schemes at low sparsity.
       <div class="image">
         <img src="colorfield1.jpg">
         <div class="label">
