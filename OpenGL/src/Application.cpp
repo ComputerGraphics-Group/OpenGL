@@ -20,7 +20,7 @@ struct ShaderProgramSource
 
 /// Holds a vector.
 /// 
-/// This structure contains the i and j values of a given vector.
+/// This structure contains the i and j values of a given vector rooted at origin.
 struct Vec
 {
     /// i value of the vector.
@@ -125,13 +125,13 @@ static unsigned int createShader(const std::string& vertex_shader, const std::st
 
 /// Draws a line using individual points.
 /// 
-/// This function draws a line between the given two points. It uses Bressenham's Line Alogrithm to draw each pixel onto the screen.
+/// This function draws a line between the given two points. It uses Bressenham's Line Alogrithm to push each point into a vector which will then be drawn.
 /// @returns a pair of Color values for later use in point shading.
 /// @param points The point vector to which the points generated are pushed onto.
 /// @param x1,y1 The first point.
 /// @param x2,y2 The second point.
-/// @param is_vector Is the given line to be drawn as a vector or a normal line?
-/// @param c The color of the given line. 
+/// @param is_vector Is the given line to be drawn a vector (Undetermined color) or a normal line (Determined color)?
+/// @param c The color of the given line. Pass {0,0} if it is undetermined.
 Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool is_vector, Color c)
 {
     int dx = x2 - x1;
@@ -150,36 +150,36 @@ Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool 
     if (y2 < y1)
         incy = -1;
     x = x1; y = y1;
-    if (dx > dy)
+    points.push_back(x);                          //push the point
+    points.push_back(y);
+    if (is_vector)                                //push the new color if it is a vector
     {
-        points.push_back(x);
-        points.push_back(y);
-        if (is_vector)
-        {
-            points.push_back(dx);
-            points.push_back(dy);
-        }
-        else
-        {
-            points.push_back(c.x);
-            points.push_back(c.y);
-        }
+        points.push_back(dx);
+        points.push_back(dy);
+    }
+    else                                          //push the passed color if it is a normal line
+    {
+        points.push_back(c.x);
+        points.push_back(c.y);
+    }
+    if (dx > dy)                                  //Check if slope is between -1 and 1
+    {
         d = 2 * dy - dx;
         incNE = 2 * (dy - dx);
         incE = 2 * dy;
         for (i = 0; i < dx; i++)
         {
-            if (x > 500 || x < -500 || y > 500 || y < -500)
+            if (x > 500 || x < -500 || y > 500 || y < -500)       //Clipping condition
             {
-                return { dx,dy };
+                return { dx, dy };
             }
 
-            if (d >= 0)
+            if (d >= 0)                        //Choose North-East
             {
                 y += incy;
                 d += incNE;
             }
-            else
+            else                               //Choose East
                 d += incE;
             x += incx;
             points.push_back(x);
@@ -198,18 +198,6 @@ Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool 
     }
     else
     {
-        points.push_back(x);
-        points.push_back(y);
-        if (is_vector)
-        {
-            points.push_back(dx);
-            points.push_back(dy);
-        }
-        else
-        {
-            points.push_back(c.x);
-            points.push_back(c.y);
-        }
         d = 2 * dx - dy;
         incNE = 2 * (dx - dy);
         incE = 2 * dx;
@@ -217,7 +205,7 @@ Color makeLine(std::vector<float>& points, int x1, int y1, int x2, int y2, bool 
         {
             if (x > 500 || x < -500 || y > 500 || y < -500)
             {
-                return { dx,dy };
+                return { dx, dy };
             }
 
             if (d >= 0)
@@ -301,13 +289,13 @@ void makeCircle(std::vector<float>& points, int xc, int yc, int r, Color c)
 
     while (y > x)
     {
-        if (d < 0)
+        if (d < 0)                              //Choose East
         {
             d = d + deltaE;
             deltaE = deltaE + 2;
             deltaSE = deltaSE + 2;
         }
-        else
+        else                                    //Choose South-East
         {
             d = d + deltaSE;
             deltaE = deltaE + 2;
@@ -359,9 +347,9 @@ void makeCircle(std::vector<float>& points, int xc, int yc, int r, Color c)
 
 /// Computes the inverse square root of a float.
 /// 
-/// This function uses Newton's method for calculating an inverse square root of a floating point value.
+/// This function uses the fast inverse square root method for calculating an inverse square root of a floating point value.
 /// @returns The inverse square root of the given value.
-/// @param x The value for which the inverse square root is calculated.
+/// @param x The value for which the inverse square root is to be calculated.
 float invSqrt(float x) {
     float xhalf = 0.5f * x;
     int i = *(int*)&x;            // store floating-point bits in integer
@@ -373,10 +361,10 @@ float invSqrt(float x) {
 
 /// Makes an arrow head on a particular vector.
 /// 
-/// The function generates 3 points based on the given vector information and generates an arrowhead at the given point.
+/// The function generates 3 points based on the given vector information and calls the line function between these points, generating an arrowhead at the head of the displaced vector.
 /// @param points The point vector to which the points generated are pushed onto.
-/// @param x1,y1 The point at which the arrow is generated.
-/// @param vector The vector angle of the arrowhead.
+/// @param x1,y1 The base of the vector, the point its tail will end up on.
+/// @param vector The vector rooted at origin.
 /// @param c The color of the arrowhead.
 
 void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector, Color c)
@@ -395,14 +383,20 @@ void makeArrowHead(std::vector<float>& points, int x1, int y1, Vec vector, Color
 /// @param x,y the input of the function f(x,y).
 Vec vectorField(float x, float y)
 {
-    return { x * y * y, y * x * x };
+    int xp = 100, yp = 100, qp = 1;               //x-pos, y-pos, charge of the positive end
+    int xn = -100, yn = -100, qn = 2;              //x-pos, y-pos, charge of the negative end
+    float factorp = qp * pow((xp - x) * (xp - x) + (yp - y) * (yp - y), -3 / 2);          //Coulomb's law combined with vector normalization
+    float factorn = qn * pow((xn - x) * (xn - x) + (yn - y) * (yn - y), -3 / 2);
+    Vec positive_component = { (xp - x) * factorp, (yp - y) * factorp };                  //Influence of positive end of dipole
+    Vec negative_component = { (xn - x) * factorn, (yn - y) * factorn };                  //Influence of negative end of dipole
+    return { positive_component.i - negative_component.i, positive_component.j - negative_component.j };      //Return the destructive interference of the components
 }
 
-/// The scale size of the drawn elements. Made for the purposes of efficiency.
-float scale = 0.000001;
+/// The scale of the vectors. Made for the purpose of visualizing fast growing fields.
+float scale = 6000;
 /// The sparsity of points drawn onto the viewport. The smaller the number, the denser the points.
-float sparsity = 50;
-/// The multiplicative value of zoom provided to the viewport. Used to see more of the given element or to concentrate onto a point.
+float sparsity = 40;
+/// The multiplicative value of zoom provided to the viewport. Used to plot farther/nearer vectors at a given point and scale them accordingly.
 float zoom = 1;
 /// Used to check whether the screen is currently to be drawn onto.
 bool drawn = false;
@@ -434,7 +428,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 /// @param button,action,mods The current action the mouse is recording.
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (sparsity > 5 && button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
         sparsity *= 1.1;
     else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         sparsity /= 1.1;
@@ -531,16 +525,16 @@ int main(void)
                 for (int j = -500; j < 501; j = j + sparsity)
                 {
                     vector = vectorField(i * 1 / zoom, j * 1 / zoom);     //If zoom is 2, then we have to find the vector not at (i,j) but at (i/2,j/2) and then plot it at (i,j)
-                    //           makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale), {0,0});
-                    c = makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale, true, { 0,0 });     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) cause that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
+                    //           makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale), {0,0});       //uncomment this and comment the next 3 lines to see the circle field visualization
+                    c = makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale, true, { 0,0 });     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) because that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
                     makeCircle(points, i, j, 2, c); //teeny tiny circle at base for aesthetic
                     makeArrowHead(points, i, j, { (vector.i * zoom * scale), (vector.j * zoom * scale) }, c); //make an arrow head
                 }
             }
 
-            for (int i = 0; i < points.size(); i++)     //normalizing points
+            for (int i = 0; i < points.size(); i++)               //normalizing points
                 points.at(i) = (points.at(i) * 0.002);
-            points_array = &points[0];  //the promised step
+            points_array = &points[0];                            //the promised step
 
             glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points_array, GL_STATIC_DRAW);
 
@@ -557,7 +551,7 @@ int main(void)
             std::cout << "Average time per point so far: " << sum_tpp / (double)n << std::endl << std::endl;
         }
 
-        glDrawArrays(GL_POINTS, 0, points.size() / 4);
+        glDrawArrays(GL_POINTS, 0, points.size() / 4);            //Draw the points on the screen
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

@@ -9,7 +9,7 @@ out vec4 vertex_color;
 void main()
 {
     gl_Position = position;
-    vertex_color = vec4(1.0, color.y, color.x, 0.0);
+    vertex_color = vec4(1.0, color.x, color.y, 0.0);
 };
 
 #shader fragment

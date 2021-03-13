@@ -150,6 +150,12 @@
               Vector field of (x<sup>2</sup>-y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
+          <div class="image">
+            <img src="arrowField4.png">
+            <div class="label">
+              Vector field of sin(x+y)i + cos(x-y)j
+            </div>
+          </div>
           The next thing we wanted is for the field to be interactive. We wanted to be able to zoom in, change density, scaling, etc. We spent quite a bit of time refining the zooming
           feature. We also added tiny circles at the base of every vector for aesthetic
           <div class="image">
@@ -159,7 +165,7 @@
             </div>
           </div>
           We were changing the scaling too much on each render
-          <p>&nbsp;</p>
+          <br>
           <div class="image">
             <img src="zoom2.gif">
             <div class="label">
@@ -177,11 +183,19 @@
               Vector field of (x<sup>2</sup>+y<sup>2</sup>)i + (x<sup>2</sup>-y<sup>2</sup>)j
             </div>
           </div>
+          We also added an option to increase sparsity without affecting zoom, in case you want to zoom out but it's getting too cluttered. In the following example, we never actually
+          zoomed in; only out but increased sparsity every time it got too dense
+          <div class="image">
+            <img src="zoomSparse.gif">
+            <div class="label">
+              Vector field of x<sup>3</sup>yi + y<sup>3</sup>xj
+            </div>
+          </div>
       </div>
   </div>
   <div class="segment">
     <div class="title">
-      Extras
+      Varying the visualization
     </div>
     <div class="content">
       <h2>PolyLines</h2>
@@ -189,7 +203,7 @@
       generate the endpoint of this line f(x,y) and draw a line there. Then we take f(x,y) as the new start point and generate f(f(x,y)) as its endpoint, and so on.
       Most functions we used in the vector field example, such as x<sup>2</sup>yi + xy<sup>2</sup>j, grow too fast to be reliably seen in display. However there are certain classes of functions which can be seen.
       For example, the function f(x,y) = (y-x,-x-y) generates a square. <br>
-      (We used a coloring scheme described in the next section)
+      (We used a coloring algorithm described in the next section)
       <div class="image">
         <img src="polyline1.jpg">
         <div class="label">
@@ -227,7 +241,7 @@
       <div class="image">
         <img src="circleField3.gif">
         <div class="label">
-            Circle field of f(x,y) = (x<sup>3</sup>/y),(y<sup>3</sup>/x)
+            Circle field of f(x,y) = (x<sup>3</sup>/y)i + (y<sup>3</sup>/x)j
         </div>
       </div>
     </div>
@@ -245,8 +259,8 @@
           Vector field of x<sup>2</sup>i + xyj
         </div>
       </div>
-      We could have fixed the black quadrant by adjusting the values more carefully, but we deemed this coloring scheme unworthy of further experimentation as it was not dynamic at all.
-      <p>The next scheme we tried out was setting the RG values of all pixels in a vector to the x and y components of that vector (B=1.0 again). This this what it looked like:</p>
+      We could have fixed the black quadrant by adjusting the values more carefully, but we deemed this coloring algorithm unworthy of further experimentation as it was not dynamic at all.
+      <p>The next algorithm we tried out was setting the RG values of all pixels in a vector to the x and y components of that vector (B=1.0 again). This this what it looked like:</p>
       <div class="image">
         <img src="firstColorField1.png">
         <div class="label">
@@ -282,7 +296,7 @@
         </div>
       </div>
       This one looks like the collision of stars
-      <p>&nbsp;</p>
+      <br>
       <div class="image">
         <img src="colorField5.gif">
         <div class="label">
@@ -290,7 +304,7 @@
         </div>
       </div>
       And here we have an explosion of sorts
-      <p>&nbsp;</p>
+      <br>
       <div class="image">
         <img src="colorField6.gif">
         <div class="label">
@@ -298,15 +312,15 @@
         </div>
       </div>
       A similar explosion, but two cutting across each other
-      <p>&nbsp;</p>
+      <br>
       <div class="image">
         <img src="colorField7.gif">
         <div class="label">
           Vector field of x<sup>4</sup>yi + y<sup>4</sup>xj
         </div>
       </div>
-      Unsurprisingly, this field looks similar to the one of x²yi + y²xj
-      <p>&nbsp;</p>
+      Unsurprisingly, this field looks similar to the one of x²yi + y²xj while zoomed in
+      <br>
       <div class="image">
         <img src="colorField8.gif">
         <div class="label">
@@ -374,7 +388,7 @@
           implementation resulted in more time taken as well as memory usage. The 28th iteration took as long as 9.6 seconds and peaked at 10.8 GB of RAM usage.
         </li>
       </ul>
-      <p>&nbsp;</p>
+      <br>
       <h2>Attempting to optimize</h2>
       We're not sure why the first observation occurs and the second observation is not worth pondering. The third one however, has room for improvement.
       <p>We theorized that the reason there are so many points are because of 2 reasons: Points outside the window and duplicates.</p>
@@ -437,8 +451,46 @@
       Playing around pt. 2
     </div>
     <div class="content">
-      Another interesting variation on the vector field is applying the function not on a vector but rather the color of the point. The result is functionally the same except that the
-      resultant viewport displays some fascinating color schemes at low sparsity.
+      We also made the vector field for an electric dipole and ran the simulation. This was the vector field function:
+      <div class="one-line-code">
+        <div class="image">
+          <img src="dipoleFunction.png">
+          <div class="label">
+            Electric dipole vector field function
+          </div>
+        </div>
+      </div>
+      As you can see, this is the vector field for a negatively charged particle. The coloring algorithm we used was vector length based. The more white it is, the longer the vector. The
+      more blue it is, the shorter. This is what it looked like:
+      <div class="image">
+        <img src="electricDipole.png">
+        <div class="label">
+          Electric dipole field with negative end (-100, 0, 1) and the positive end (100, 0, 1)
+        </div>
+      </div>
+      <div class="image">
+        <img src="electricDipole2.png">
+        <div class="label">
+          Electric dipole field with negative end (-100, 0, 1) and the positive end (100, 0, 2)
+        </div>
+      </div>
+      Now with a coloring algorithm with red instead of blue,
+      <div class="image">
+        <img src="electricDipole3.png">
+        <div class="label">
+          Electric dipole field with negative end (-100, -100, 2) and the positive end (100, 100, 1)
+        </div>
+      </div>
+      Zoom in a little and apply the previous coloring algorithm (dx and dy based) and we get this:
+      <div class="image">
+        <img src="electricDipole4.png">
+        <div class="label">
+          Electric dipole field with negative end (-100, -100, 2) and the positive end (100, 100, 1)
+        </div>
+      </div>
+      Each of these vectors show the force on an electron (or any negatively charged particle) when placed at the base of the vector. That's pretty neat.<br><br><br>
+      Another interesting variation of the vector field we found is applying the function not on a vector but rather the color of the point. The result is functionally the same except
+      that the resultant viewport displays some fascinating color schemes at low sparsity.
       <div class="image">
         <img src="colorfield1.jpg">
         <div class="label">
@@ -467,5 +519,9 @@
       </div>
     </div>
   </div>
+  <div class="segment">
+    <div class="title">
+      Thank You!
+    </div>
 </body>
 </html>
