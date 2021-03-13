@@ -483,9 +483,11 @@ int main(void)
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
 
+    // Vertex assignment
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 
+    //Color assignment
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void*)(sizeof(float) * 2));
 
@@ -532,6 +534,8 @@ int main(void)
             glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points_array, GL_STATIC_DRAW);
 
             drawn = true;
+
+            //This piece of code is used to document the runtime for each point and total runtime overall
             std::chrono::time_point<std::chrono::system_clock> end_time = std::chrono::system_clock::now();
             std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
             std::cout << "Number of points: " << points.size() / 4 << std::endl;
