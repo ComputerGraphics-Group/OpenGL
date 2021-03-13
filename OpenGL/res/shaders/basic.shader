@@ -21,6 +21,5 @@ in vec4 vertex_color;
 
 void main()
 {
-    //color = vertex_color;
-    color = vec4(1, 1, 0, 1);
+    color = vertex_color;
 };

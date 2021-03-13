@@ -75,6 +75,10 @@ img {
   object-fit: fill;
 }
 
+.wide img {
+  object-fit: fill;
+}
+
 .one-line-code .image {
   width: 800px;
   height: 130px;
