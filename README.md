@@ -4,7 +4,7 @@ Pranav Balaji - 2019A7PS0040H
 Subienay Ganesh - 2019A7PS0096H  
 Kaustubh Bhanj - 2019A7PS0009H  
 <br>
-**Please download and extract the release "Source/ComputerGraphicsAssignment1.rar" in order to view the html documentation**
+**Please download and extract the release "Source/ComputerGraphicsAssignment1.rar" in order to view the html documentation**  
 Otherwise, <br><br/>
 
 For the source code, go to [OpenGL/src](https://github.com/ComputerGraphics-Group/OpenGL/blob/master/OpenGL/src/Application.cpp)
