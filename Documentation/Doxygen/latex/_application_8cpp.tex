@@ -1,5 +1,5 @@
-\hypertarget{_application_8cpp}{}\doxysection{src/\+Application.cpp File Reference}
-\label{_application_8cpp}\index{src/Application.cpp@{src/Application.cpp}}
+\hypertarget{_application_8cpp}{}\doxysection{C\+:/\+Users/\+Subs/\+Documents/\+Open\+GL\+\_\+\+CGProj/\+Open\+GL/src/\+Application.cpp File Reference}
+\label{_application_8cpp}\index{C:/Users/Subs/Documents/OpenGL\_CGProj/OpenGL/src/Application.cpp@{C:/Users/Subs/Documents/OpenGL\_CGProj/OpenGL/src/Application.cpp}}
 {\ttfamily \#include $<$GL/glew.\+h$>$}\newline
 {\ttfamily \#include $<$GLFW/glfw3.\+h$>$}\newline
 {\ttfamily \#include $<$iostream$>$}\newline
@@ -36,6 +36,8 @@ void \mbox{\hyperlink{_application_8cpp_a9fc5e0828029e5004c5150d36395c8aa}{make\
 \item 
 \mbox{\hyperlink{struct_vec}{Vec}} \mbox{\hyperlink{_application_8cpp_a4193238358072802465250bdc0dd778d}{vector\+Field}} (float x, float y)
 \item 
+void \mbox{\hyperlink{_application_8cpp_ade50524567c072a8c15f1167ab3d98c0}{Poly\+Line}} (std\+::vector$<$ float $>$ \&points, int x, int y, \mbox{\hyperlink{struct_color}{Color}} c)
+\item 
 void \mbox{\hyperlink{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}{scroll\+\_\+callback}} (GLFWwindow $\ast$window, double xoffset, double yoffset)
 \item 
 void \mbox{\hyperlink{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}{mouse\+\_\+button\+\_\+callback}} (GLFWwindow $\ast$window, int button, int action, int mods)
@@ -47,12 +49,12 @@ int \mbox{\hyperlink{_application_8cpp_a840291bc02cba5474a4cb46a9b9566fe}{main}}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-float \mbox{\hyperlink{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}{scale}} = 0.\+000001
-\begin{DoxyCompactList}\small\item\em The scale size of the drawn elements. Made for the purposes of efficiency. \end{DoxyCompactList}\item 
-float \mbox{\hyperlink{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}{sparsity}} = 50
+float \mbox{\hyperlink{_application_8cpp_a1d28dec57cce925ad92342891bd71e7c}{scale}} = 6000
+\begin{DoxyCompactList}\small\item\em The scale of the vectors. Made for the purpose of visualizing fast growing fields. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}{sparsity}} = 40
 \begin{DoxyCompactList}\small\item\em The sparsity of points drawn onto the viewport. The smaller the number, the denser the points. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{_application_8cpp_a15776f201dc8b554110222e67a51cbae}{zoom}} = 1
-\begin{DoxyCompactList}\small\item\em The multiplicative value of zoom provided to the viewport. Used to see more of the given element or to concentrate onto a point. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em The multiplicative value of zoom provided to the viewport. Used to plot farther/nearer vectors at a given point and scale them accordingly. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{_application_8cpp_a8d91e25a674104ae23d71b57da4718d2}{drawn}} = false
 \begin{DoxyCompactList}\small\item\em Used to check whether the screen is currently to be drawn onto. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -99,12 +101,12 @@ The resultant the program ID of the created shader program.
 
 Computes the inverse square root of a float.
 
-This function uses Newton\textquotesingle{}s method for calculating an inverse square root of a floating point value. \begin{DoxyReturn}{Returns}
+This function uses the fast inverse square root method for calculating an inverse square root of a floating point value. \begin{DoxyReturn}{Returns}
 The inverse square root of the given value. 
 \end{DoxyReturn}
 
 \begin{DoxyParams}{Parameters}
-{\em x} & The value for which the inverse square root is calculated. \\
+{\em x} & The value for which the inverse square root is to be calculated. \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}\label{_application_8cpp_a286930f4e8ede059b83ff6eafa2ff718}} 
@@ -138,13 +140,13 @@ This function initialises Open\+GL windows, sets up the Array Buffer and assigns
 
 Makes an arrow head on a particular vector.
 
-The function generates 3 points based on the given vector information and generates an arrowhead at the given point. 
+The function generates 3 points based on the given vector information and calls the line function between these points, generating an arrowhead at the head of the displaced vector. 
 \begin{DoxyParams}{Parameters}
 {\em points} & The point vector to which the points generated are pushed onto. \\
 \hline
-{\em x1,y1} & The point at which the arrow is generated. \\
+{\em x1,y1} & The base of the vector, the point its tail will end up on. \\
 \hline
-{\em vector} & The vector angle of the arrowhead. \\
+{\em vector} & The vector rooted at origin. \\
 \hline
 {\em c} & The color of the arrowhead. \\
 \hline
@@ -176,7 +178,7 @@ This function uses Bressenham\textquotesingle{}s circle drawing algorithm to dra
 
 Draws a line using individual points.
 
-This function draws a line between the given two points. It uses Bressenham\textquotesingle{}s Line Alogrithm to draw each pixel onto the screen. \begin{DoxyReturn}{Returns}
+This function draws a line between the given two points. It uses Bressenham\textquotesingle{}s Line Alogrithm to push each point into a vector which will then be drawn. \begin{DoxyReturn}{Returns}
 a pair of \mbox{\hyperlink{struct_color}{Color}} values for later use in point shading. 
 \end{DoxyReturn}
 
@@ -187,10 +189,9 @@ a pair of \mbox{\hyperlink{struct_color}{Color}} values for later use in point s
 \hline
 {\em x2,y2} & The second point. \\
 \hline
-{\em is\+\_\+vector} & Is the given line to be drawn as a vector or a normal line? \\
+{\em is\+\_\+vector} & Is the given line to be drawn a vector (Undetermined color) or a normal line (Determined color)? \\
 \hline
-{\em c} & The color of the given line. ~\newline
- \\
+{\em c} & The color of the given line. Pass \{0,0\} if it is undetermined. \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}\label{_application_8cpp_a5515d805e76ce6728de3c0dc5e187c86}} 
@@ -219,6 +220,23 @@ Parses the shaders from the file path for use in the shader program.
 
 \begin{DoxyParams}{Parameters}
 {\em filepath} & The path of the shader file we want to parse. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{_application_8cpp_ade50524567c072a8c15f1167ab3d98c0}\label{_application_8cpp_ade50524567c072a8c15f1167ab3d98c0}} 
+\index{Application.cpp@{Application.cpp}!PolyLine@{PolyLine}}
+\index{PolyLine@{PolyLine}!Application.cpp@{Application.cpp}}
+\doxysubsubsection{\texorpdfstring{PolyLine()}{PolyLine()}}
+{\footnotesize\ttfamily void Poly\+Line (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{points,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{\mbox{\hyperlink{struct_color}{Color}}}]{c }\end{DoxyParamCaption})}
+
+Generates a polyline starting from a given point.
+
+This function generates a set of 50 lines each generated from a previous line based on a vector field formula. 
+\begin{DoxyParams}{Parameters}
+{\em points} & The point vector to which the points generated are pushed onto. \\
+\hline
+{\em x,y} & The starting point. \\
+\hline
+{\em c} & The initial color of the lines. \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}\label{_application_8cpp_a06ad2502008f16fbcf01dfaa7f7bc9ea}} 
@@ -269,17 +287,17 @@ Used to check whether the screen is currently to be drawn onto.
 \index{Application.cpp@{Application.cpp}!scale@{scale}}
 \index{scale@{scale}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{scale}{scale}}
-{\footnotesize\ttfamily float scale = 0.\+000001}
+{\footnotesize\ttfamily float scale = 6000}
 
 
 
-The scale size of the drawn elements. Made for the purposes of efficiency. 
+The scale of the vectors. Made for the purpose of visualizing fast growing fields. 
 
 \mbox{\Hypertarget{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}\label{_application_8cpp_a2d32fb59812377380490d95c5b231fa7}} 
 \index{Application.cpp@{Application.cpp}!sparsity@{sparsity}}
 \index{sparsity@{sparsity}!Application.cpp@{Application.cpp}}
 \doxysubsubsection{\texorpdfstring{sparsity}{sparsity}}
-{\footnotesize\ttfamily float sparsity = 50}
+{\footnotesize\ttfamily float sparsity = 40}
 
 
 
@@ -293,5 +311,5 @@ The sparsity of points drawn onto the viewport. The smaller the number, the dens
 
 
 
-The multiplicative value of zoom provided to the viewport. Used to see more of the given element or to concentrate onto a point. 
+The multiplicative value of zoom provided to the viewport. Used to plot farther/nearer vectors at a given point and scale them accordingly. 
 

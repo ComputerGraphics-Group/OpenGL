@@ -13,6 +13,7 @@ var _application_8cpp =
     [ "makeLine", "_application_8cpp.html#aa7ec2e05bfa22c34b8edafdeb91e27c0", null ],
     [ "mouse_button_callback", "_application_8cpp.html#a5515d805e76ce6728de3c0dc5e187c86", null ],
     [ "parseShader", "_application_8cpp.html#a3f523b5fa23378b7728e157d141ee7ca", null ],
+    [ "PolyLine", "_application_8cpp.html#ade50524567c072a8c15f1167ab3d98c0", null ],
     [ "scroll_callback", "_application_8cpp.html#a06ad2502008f16fbcf01dfaa7f7bc9ea", null ],
     [ "vectorField", "_application_8cpp.html#a4193238358072802465250bdc0dd778d", null ],
     [ "drawn", "_application_8cpp.html#a8d91e25a674104ae23d71b57da4718d2", null ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['color_26',['Color',['../struct_color.html',1,'']]]
+  ['color_27',['Color',['../struct_color.html',1,'']]]
 ];

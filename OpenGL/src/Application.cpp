@@ -391,7 +391,6 @@ Vec vectorField(float x, float y)
     Vec negative_component = { (xn - x) * factorn, (yn - y) * factorn };                  //Influence of negative end of dipole
     return { positive_component.i - negative_component.i, positive_component.j - negative_component.j };      //Return the destructive interference of the components
 }
-
 /// The scale of the vectors. Made for the purpose of visualizing fast growing fields.
 float scale = 6000;
 /// The sparsity of points drawn onto the viewport. The smaller the number, the denser the points.
@@ -400,6 +399,30 @@ float sparsity = 40;
 float zoom = 1;
 /// Used to check whether the screen is currently to be drawn onto.
 bool drawn = false;
+
+/// Generates a polyline starting from a given point.
+/// 
+/// This function generates a set of 50 lines each generated from a previous line based on a vector field formula.
+/// @param points The point vector to which the points generated are pushed onto.
+/// @param x,y The starting point.
+/// @param c The initial color of the lines.
+void PolyLine(std::vector<float>& points, int x, int y, Color c) {
+
+    int fx, fy;
+    Color fc;
+
+    for (int i = 0; i < 50; i++) {
+        fx = 3.5 * x + 7.2 * y;
+        fy = -x - y;
+
+        fc = makeLine(points, x, y, fx, fy, true, c);
+
+        x = fx;
+        y = fy;
+        c = fc;
+    }
+
+}
 
 ///  Generates a Mouse scroll callback.
 ///
@@ -525,10 +548,12 @@ int main(void)
                 for (int j = -500; j < 501; j = j + sparsity)
                 {
                     vector = vectorField(i * 1 / zoom, j * 1 / zoom);     //If zoom is 2, then we have to find the vector not at (i,j) but at (i/2,j/2) and then plot it at (i,j)
-                    //           makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale), {0,0});       //uncomment this and comment the next 3 lines to see the circle field visualization
+                    //makeCircle(points, i, j, sqrt(vector.i * zoom * scale * vector.i * zoom * scale + vector.j * zoom * scale * vector.j * zoom * scale), {0,0});       //uncomment this and comment the next 3 lines to see the circle field visualization
                     c = makeLine(points, i, j, i + vector.i * zoom * scale, j + vector.j * zoom * scale, true, { 0,0 });     //We don't want to plot from (i,j) to (i+vector.i, j+vector.j) because that would be massive hence the scale. Also as zoom increases, the vectors should appear bigger
                     makeCircle(points, i, j, 2, c); //teeny tiny circle at base for aesthetic
                     makeArrowHead(points, i, j, { (vector.i * zoom * scale), (vector.j * zoom * scale) }, c); //make an arrow head
+
+                    //Polyline(100,-100); Generates a polyline starting at (100,-100).
                 }
             }
 
