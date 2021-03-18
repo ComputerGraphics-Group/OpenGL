@@ -16,7 +16,7 @@ HTML Code documentation is present in [Documentation/Doxygen/html](https://githu
 HTML documentation of our journey through the assignment is present in [Documentation/Our Journey](https://github.com/ComputerGraphics-Group/OpenGL/tree/master/Documentation/Our%20Journey)
 
 A ready-made executable is present as "OpenGL.exe" in the latest release which simulates the vector field of the latest electric dipole mentioned in our journey.
-You can zoom using the mouse wheel and change sparsity using the mouse buttons.
+You can zoom using the mouse wheel and change sparsity using the mouse buttons. Shaders won't work here.
 
 You can modify the `vectorField(int x, int y)` function to any vector field, but please remember to change the scale accordingly.
 For an order 1 field like xi+yj, use a `scale` of 0.1 to 0.01. For an order 2 field like x²i+y²j, use a `scale` of 0.0001 to 0.00001 and so on. Similarly for fields like sinxi+cosyj, use a `scale` of 10 or 100.
